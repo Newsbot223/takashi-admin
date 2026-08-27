@@ -4,8 +4,13 @@ import { revalidatePath } from 'next/cache';
 
 import { createClient } from '@/lib/supabase/server';
 import { getAllowedNextStatuses } from '@/lib/orders/queries';
-import { orderDetailRowSchema, statusHistoryRowSchema } from '@/lib/orders/schemas';
+import {
+  orderDetailRowSchema,
+  orderStatusEmailNotificationRowSchema,
+  statusHistoryRowSchema,
+} from '@/lib/orders/schemas';
 import { isNotifiableStatus, notifyOrderStatusEmail } from '@/lib/orders/notify-status-email';
+import { notifyPickupReady, type NotifyPickupReadyResult } from '@/lib/orders/notify-pickup-ready';
 
 export type OrderDetail = {
   id: string;
@@ -26,6 +31,10 @@ export type OrderDetail = {
   lang: string;
   estimatedTime: string | null;
   requestedTime: string | null;
+  /** sent_at из order_status_email_notifications для (order_number,
+   *  'ready_for_pickup') — null, если ещё не отправлено. Переиспользует
+   *  существующий журнал уведомлений вместо нового поля в orders. */
+  pickupReadyNotifiedAt: string | null;
   createdAt: string;
   customerName: string;
   customerPhone: string;
@@ -102,6 +111,26 @@ export async function getOrderDetailsAction(orderId: string): Promise<OrderDetai
 
   const allowedNextStatuses = await getAllowedNextStatuses(parsedOrder.status);
 
+  /* Только для Abholung — фича вообще не применяется к доставке.
+     Читает существующий журнал уведомлений (order_status_email_notifications,
+     staff-only SELECT policy добавлена в 20260826_add_release_status_email_notification_and_staff_read.sql),
+     а не новое поле в orders — ошибка чтения не должна ронять всю
+     страницу заказа, просто кнопка будет вести себя как "ещё не
+     отправлено" (безопасная сторона: в худшем случае лишний клик,
+     который сервер сам заблокирует через claim). */
+  let pickupReadyNotifiedAt: string | null = null;
+  if (parsedOrder.order_type === 'pickup') {
+    const { data: notificationRow } = await supabase
+      .from('order_status_email_notifications')
+      .select('sent_at')
+      .eq('order_number', parsedOrder.order_number)
+      .eq('status', 'ready_for_pickup')
+      .maybeSingle();
+    pickupReadyNotifiedAt = notificationRow
+      ? orderStatusEmailNotificationRowSchema.parse(notificationRow).sent_at
+      : null;
+  }
+
   return {
     ok: true,
     order: {
@@ -123,6 +152,7 @@ export async function getOrderDetailsAction(orderId: string): Promise<OrderDetai
       lang: parsedOrder.lang,
       estimatedTime: parsedOrder.estimated_time,
       requestedTime: parsedOrder.requested_time,
+      pickupReadyNotifiedAt,
       createdAt: parsedOrder.created_at,
       customerName: parsedOrder.customers?.name ?? '—',
       customerPhone: parsedOrder.customers?.phone ?? '—',
@@ -271,6 +301,24 @@ export async function previewOrderHistoryCleanupAction(
   }
 
   return { ok: true, count: data ?? 0 };
+}
+
+/**
+ * "Bestellung fertig — Kunde benachrichtigen" — только для Abholung.
+ * НЕ меняет orders.status (заказ остаётся в своём текущем статусе,
+ * см. requirement "не путать отправку уведомления со сменой статуса").
+ * Дедупликация полностью на стороне takashi-backend/api/notify-pickup-ready.js
+ * (claim_status_email_notification с ключом 'ready_for_pickup') — здесь
+ * только сетевой вызов и revalidatePath после успешной отправки, чтобы
+ * getOrderDetailsAction на следующем открытии заказа подтянул
+ * pickupReadyNotifiedAt и кнопка сама стала disabled.
+ */
+export async function notifyPickupReadyAction(orderNumber: string): Promise<NotifyPickupReadyResult> {
+  const result = await notifyPickupReady(orderNumber);
+  if (result.ok && result.sent) {
+    revalidatePath('/orders');
+  }
+  return result;
 }
 
 export type ClearOrderHistoryResult = { ok: true; deletedCount: number } | { ok: false; error: string };

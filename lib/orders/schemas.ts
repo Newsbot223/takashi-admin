@@ -116,6 +116,15 @@ export const orderDetailRowSchema = z.object({
   order_items: z.array(orderItemRowSchema),
 });
 
+/** Строка из order_status_email_notifications — используется только для
+ *  чтения pickupReadyNotifiedAt (см. actions.ts). sent_at гарантированно
+ *  не null в этой таблице (проставляется default now() при INSERT в
+ *  claim_status_email_notification), но .nullable() оставлен на случай
+ *  расхождения схемы — безопаснее, чем упасть здесь. */
+export const orderStatusEmailNotificationRowSchema = z.object({
+  sent_at: z.string().nullable(),
+});
+
 export const statusHistoryRowSchema = z.object({
   id: z.string(),
   status: z.string(),

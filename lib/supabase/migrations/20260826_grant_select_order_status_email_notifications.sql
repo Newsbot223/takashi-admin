@@ -1,0 +1,11 @@
+-- Follow-up to 20260826_add_release_status_email_notification_and_staff_read.sql:
+-- the staff-read RLS policy added there is not enough on its own —
+-- Postgres also requires an underlying table GRANT before RLS policies
+-- have anything to filter. authenticated had no SELECT grant on this
+-- table at all (verified against information_schema.role_table_grants),
+-- so the Admin Dashboard's read of pickupReadyNotifiedAt would have
+-- failed even with the policy in place. This grants exactly SELECT,
+-- nothing else — INSERT/UPDATE/DELETE on this table remain reachable
+-- only through the existing SECURITY DEFINER RPCs
+-- (claim/release_status_email_notification).
+grant select on public.order_status_email_notifications to authenticated;

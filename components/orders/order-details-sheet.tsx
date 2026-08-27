@@ -12,9 +12,11 @@ import { CustomerDetailsSheet } from '@/components/customers/customer-details-sh
 import { buildMapsUrl } from '@/lib/maps';
 import { buildWhatsAppUrl } from '@/lib/phone';
 import { toFriendlyOrderError } from '@/lib/orders/error-messages';
+import { toast } from 'sonner';
 import {
   getOrderDetailsAction,
   updateOrderStatusAction,
+  notifyPickupReadyAction,
   type OrderDetail,
   type OrderStatusHistoryEntry,
 } from '@/app/(dashboard)/orders/actions';
@@ -49,6 +51,17 @@ function formatRequestedTime(value: string | null) {
   return value ?? 'Как можно скорее';
 }
 
+/** Отличаем конкретно выбранное клиентом время ("19:00") от ASAP-фразы
+ *  ("So bald wie möglich"/"As soon as possible"/null) — та же логика,
+ *  что в orderSummary.js (email) и index.html (сайт). Используется,
+ *  чтобы НЕ показывать одновременно "Желаемое время: 19:00" и
+ *  "Ожидаемое время: 35 Min." — это выглядит как два разных времени
+ *  готовности одного заказа. */
+const SPECIFIC_TIME_PATTERN = /^\d{1,2}:\d{2}$/;
+function isSpecificRequestedTime(value: string | null) {
+  return value !== null && SPECIFIC_TIME_PATTERN.test(value.trim());
+}
+
 function formatDateTime(iso: string) {
   return new Date(iso).toLocaleString('ru-RU', {
     day: '2-digit',
@@ -69,6 +82,8 @@ export function OrderDetailsSheet({ orderId, statuses, refreshToken = 0, onClose
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isNotifyPending, startNotifyTransition] = useTransition();
+  const [notifyError, setNotifyError] = useState<string | null>(null);
 
   const statusLabelByKey = new Map(statuses.map((s) => [s.key, s.labelDe]));
 
@@ -116,6 +131,37 @@ export function OrderDetailsSheet({ orderId, statuses, refreshToken = 0, onClose
         return;
       }
 
+      await refetchOrder(orderId);
+    });
+  }
+
+  /* "Заказ готов — уведомить клиента" — только для Abholung, не меняет
+   *  order.status (см. actions.ts). Дедупликация на стороне
+   *  takashi-backend (claim_status_email_notification), здесь только
+   *  UI-состояние + refetch, чтобы pickupReadyNotifiedAt подтянулся с
+   *  сервера и кнопка стала disabled после успеха. */
+  function handleNotifyPickupReady() {
+    if (!orderId || !order) return;
+
+    setNotifyError(null);
+    startNotifyTransition(async () => {
+      const result = await notifyPickupReadyAction(order.orderNumber);
+
+      if (!result.ok) {
+        console.error('[Orders] notifyPickupReadyAction failed:', result.error);
+        setNotifyError('Не удалось отправить уведомление. Попробуйте ещё раз.');
+        return;
+      }
+
+      if (!result.sent) {
+        // already-notified — не ошибка, просто кто-то уже успел отправить
+        // (повторный клик / гонка); подтягиваем актуальное состояние.
+        toast('Клиент уже был уведомлён.');
+        await refetchOrder(orderId);
+        return;
+      }
+
+      toast('Клиент уведомлён.');
       await refetchOrder(orderId);
     });
   }
@@ -174,6 +220,25 @@ export function OrderDetailsSheet({ orderId, statuses, refreshToken = 0, onClose
                 <span className="font-medium">{formatRequestedTime(order.requestedTime)}</span>
               </p>
 
+              {order.orderType === 'pickup' ? (
+                <div className="space-y-1 print:hidden">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    disabled={isNotifyPending || Boolean(order.pickupReadyNotifiedAt)}
+                    onClick={handleNotifyPickupReady}
+                    className="w-fit"
+                  >
+                    {order.pickupReadyNotifiedAt
+                      ? 'Клиент уведомлён'
+                      : isNotifyPending
+                        ? 'Отправка…'
+                        : 'Заказ готов — уведомить клиента'}
+                  </Button>
+                  {notifyError ? <p className="text-destructive text-xs">{notifyError}</p> : null}
+                </div>
+              ) : null}
+
               <section className="space-y-1 text-sm">
                 <h3 className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
                   Клиент
@@ -206,7 +271,9 @@ export function OrderDetailsSheet({ orderId, statuses, refreshToken = 0, onClose
                   </h3>
                   {order.deliveryAddress ? <p>{order.deliveryAddress}</p> : null}
                   {order.deliveryZone ? <p className="text-muted-foreground">{order.deliveryZone}</p> : null}
-                  {order.estimatedTime ? <p>Ожидаемое время: {order.estimatedTime}</p> : null}
+                  {order.estimatedTime && !isSpecificRequestedTime(order.requestedTime) ? (
+                    <p>Ожидаемое время: {order.estimatedTime}</p>
+                  ) : null}
                   {mapsUrl ? (
                     <div className="flex items-center gap-3 pt-1 print:hidden">
                       <Button asChild size="sm" variant="outline">
