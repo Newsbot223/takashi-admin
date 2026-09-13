@@ -32,7 +32,7 @@ export function OrdersStatusFilter({ statuses }: OrdersStatusFilterProps) {
 
   return (
     <Select value={currentStatus} onValueChange={handleChange}>
-      <SelectTrigger className="w-48">
+      <SelectTrigger className="w-full sm:w-48">
         <SelectValue placeholder="Все статусы" />
       </SelectTrigger>
       <SelectContent>

@@ -26,7 +26,7 @@ export default async function ReservationsPage({ searchParams }: ReservationsPag
         <p className="text-muted-foreground text-sm">Список всех бронирований столов</p>
       </div>
 
-      <div className="flex flex-wrap items-center gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
         <ReservationsSearch />
         <ReservationsStatusFilter statuses={statuses} />
         <ReservationsSortToggle sort={sort} search={params.q} status={params.status} />

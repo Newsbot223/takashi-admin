@@ -35,7 +35,7 @@ export function ReservationsSearch() {
       placeholder="Поиск по имени или телефону…"
       value={value}
       onChange={(event) => setValue(event.target.value)}
-      className="max-w-xs"
+      className="w-full sm:max-w-xs"
     />
   );
 }

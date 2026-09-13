@@ -31,7 +31,7 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
         <ClearOrderHistoryButton />
       </div>
 
-      <div className="flex flex-wrap items-center gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
         <OrdersSearch />
         <OrdersStatusFilter statuses={statuses} />
         <OrdersSortToggle sort={sort} search={params.q} status={params.status} />

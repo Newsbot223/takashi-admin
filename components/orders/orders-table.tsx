@@ -167,43 +167,80 @@ export function OrdersTable({ orders: initialOrders, statuses, search, status }:
             : 'Нет соединения — переподключение…'}
       </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>№ заказа</TableHead>
-            <TableHead>Клиент</TableHead>
-            <TableHead>Телефон</TableHead>
-            <TableHead>Тип</TableHead>
-            <TableHead>Статус</TableHead>
-            <TableHead>Сумма</TableHead>
-            <TableHead>Желаемое время</TableHead>
-            <TableHead>Создан</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {orders.length === 0 ? (
-            <TableRow>
-              <TableCell colSpan={8} className="text-muted-foreground py-8 text-center">
-                {hasActiveFilters ? (
-                  <div className="space-y-2">
-                    <p>Ничего не найдено</p>
-                    <Button asChild variant="outline" size="sm">
-                      <a href="/orders">Сбросить фильтры</a>
-                    </Button>
-                  </div>
-                ) : (
-                  <p>Заказов пока нет — они появятся здесь автоматически</p>
-                )}
-              </TableCell>
-            </TableRow>
+      {orders.length === 0 ? (
+        <div className="text-muted-foreground py-8 text-center">
+          {hasActiveFilters ? (
+            <div className="space-y-2">
+              <p>Ничего не найдено</p>
+              <Button asChild variant="outline" size="sm">
+                <a href="/orders">Сбросить фильтры</a>
+              </Button>
+            </div>
           ) : (
-            orders.map((order) => (
-              <TableRow
+            <p>Заказов пока нет — они появятся здесь автоматически</p>
+          )}
+        </div>
+      ) : (
+        <>
+          {/* Десктоп/планшет — обычная таблица. */}
+          <Table className="hidden md:table">
+            <TableHeader>
+              <TableRow>
+                <TableHead>№ заказа</TableHead>
+                <TableHead>Клиент</TableHead>
+                <TableHead>Телефон</TableHead>
+                <TableHead>Тип</TableHead>
+                <TableHead>Статус</TableHead>
+                <TableHead>Сумма</TableHead>
+                <TableHead>Желаемое время</TableHead>
+                <TableHead>Создан</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {orders.map((order) => (
+                <TableRow
+                  key={order.id}
+                  role="button"
+                  tabIndex={0}
+                  className={
+                    'cursor-pointer transition-colors duration-1000 ' +
+                    (highlightedIds.has(order.id) ? 'bg-amber-50' : '')
+                  }
+                  onClick={() => setSelectedOrderId(order.id)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault();
+                      setSelectedOrderId(order.id);
+                    }
+                  }}
+                >
+                  <TableCell className="font-medium">{order.orderNumber}</TableCell>
+                  <TableCell>{order.customerName}</TableCell>
+                  <TableCell>{order.customerPhone}</TableCell>
+                  <TableCell>{ORDER_TYPE_LABELS[order.orderType]}</TableCell>
+                  <TableCell>
+                    <OrderStatusBadge
+                      status={order.status}
+                      label={statusLabelByKey.get(order.status) ?? order.status}
+                    />
+                  </TableCell>
+                  <TableCell>{formatMoney(order.total)}</TableCell>
+                  <TableCell>{formatRequestedTime(order.requestedTime)}</TableCell>
+                  <TableCell>{formatDateTime(order.createdAt)}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+
+          {/* Мобильный — карточки вместо таблицы, та же кликабельность. */}
+          <div className="space-y-2 md:hidden">
+            {orders.map((order) => (
+              <div
                 key={order.id}
                 role="button"
                 tabIndex={0}
                 className={
-                  'cursor-pointer transition-colors duration-1000 ' +
+                  'bg-card cursor-pointer space-y-2 rounded-lg border p-3 transition-colors duration-1000 ' +
                   (highlightedIds.has(order.id) ? 'bg-amber-50' : '')
                 }
                 onClick={() => setSelectedOrderId(order.id)}
@@ -214,24 +251,34 @@ export function OrdersTable({ orders: initialOrders, statuses, search, status }:
                   }
                 }}
               >
-                <TableCell className="font-medium">{order.orderNumber}</TableCell>
-                <TableCell>{order.customerName}</TableCell>
-                <TableCell>{order.customerPhone}</TableCell>
-                <TableCell>{ORDER_TYPE_LABELS[order.orderType]}</TableCell>
-                <TableCell>
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <div className="font-medium">№ {order.orderNumber}</div>
+                    <div className="text-muted-foreground text-sm">{order.customerName}</div>
+                  </div>
                   <OrderStatusBadge
                     status={order.status}
                     label={statusLabelByKey.get(order.status) ?? order.status}
                   />
-                </TableCell>
-                <TableCell>{formatMoney(order.total)}</TableCell>
-                <TableCell>{formatRequestedTime(order.requestedTime)}</TableCell>
-                <TableCell>{formatDateTime(order.createdAt)}</TableCell>
-              </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
+                </div>
+
+                <div className="text-muted-foreground grid grid-cols-2 gap-x-2 gap-y-1 text-sm">
+                  <span>{order.customerPhone}</span>
+                  <span className="text-right">{ORDER_TYPE_LABELS[order.orderType]}</span>
+                  <span>{formatRequestedTime(order.requestedTime)}</span>
+                  <span className="text-right font-medium text-foreground">
+                    {formatMoney(order.total)}
+                  </span>
+                </div>
+
+                <div className="text-muted-foreground text-xs">
+                  Создан: {formatDateTime(order.createdAt)}
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
 
       <OrderDetailsSheet
         orderId={selectedOrderId}
