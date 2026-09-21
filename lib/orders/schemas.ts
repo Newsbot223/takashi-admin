@@ -84,6 +84,11 @@ export const orderItemRowSchema = z.object({
   qty: z.number(),
   unit_price: numericString,
   line_total: numericString,
+  /** Ключ раздела меню на сайте (maki/nigiri/insideout/…) — нужен, чтобы
+   *  различать одинаковые названия из разных разделов (например "Sake"
+   *  есть и в Maki, и в Nigiri). null у заказов, оформленных до появления
+   *  этого столбца (миграция add_category_to_order_items) — ожидаемо. */
+  category: z.string().nullable(),
 });
 
 export const orderDetailRowSchema = z.object({

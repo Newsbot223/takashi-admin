@@ -43,6 +43,29 @@ const SOURCE_LABELS: Record<string, string> = {
   driver_app: 'Приложение водителя',
 };
 
+/** Разделы меню сайта (ключи из index.html) — нужны, чтобы различать
+ *  одинаковые названия блюд из разных разделов (например "Sake" есть
+ *  и в Maki, и в Nigiri; "Ebi Tempura" — и в Maki, и в Inside Out).
+ *  Неизвестный/отсутствующий ключ (старые заказы до появления этого
+ *  столбца) — показываем как есть, без подписи. */
+const CATEGORY_LABELS: Record<string, string> = {
+  mittagskarte: 'Обеденное меню',
+  vorspeise: 'Закуски',
+  hauptreis: 'Основные с рисом',
+  hauptnudeln: 'Основные с лапшой',
+  pokebowl: 'Поке-боул',
+  fisch: 'Рыба',
+  kinder: 'Детское меню',
+  maki: 'Маки',
+  nigiri: 'Нигири',
+  insideout: 'Инсайд-аут',
+  specialroll: 'Special Roll',
+  bigroll: 'Big Roll Tempura',
+  sashimi: 'Сашими',
+  sushiset: 'Суши-сет',
+  dessert: 'Десерт',
+};
+
 function formatMoney(value: number) {
   return `${value.toFixed(2)} €`;
 }
@@ -292,11 +315,16 @@ export function OrderDetailsSheet({ orderId, statuses, refreshToken = 0, onClose
                   Товары
                 </h3>
                 <div className="divide-y rounded-md border">
-                  {order.items.map((item) => (
+                  {order.items.map((item) => {
+                    const categoryLabel = item.category
+                      ? (CATEGORY_LABELS[item.category] ?? item.category)
+                      : null;
+
+                    return (
                     <div key={item.id} className="flex items-start justify-between gap-2 p-2">
                       <div>
                         <div>
-                          {item.qty}× {item.name}
+                          {item.qty}× {categoryLabel ? `${categoryLabel}: ` : ''}{item.name}
                           {item.variant ? ` (${item.variant})` : ''}
                         </div>
                         {item.comment ? (
@@ -305,7 +333,8 @@ export function OrderDetailsSheet({ orderId, statuses, refreshToken = 0, onClose
                       </div>
                       <div className="whitespace-nowrap">{formatMoney(item.lineTotal)}</div>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
                 <div className="flex justify-between pt-1">
                   <span className="text-muted-foreground">Подытог</span>

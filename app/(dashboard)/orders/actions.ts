@@ -47,6 +47,8 @@ export type OrderDetail = {
     qty: number;
     unitPrice: number;
     lineTotal: number;
+    /** Раздел меню (maki/nigiri/insideout/…) — см. orderItemRowSchema. */
+    category: string | null;
   }[];
 };
 
@@ -77,7 +79,7 @@ export async function getOrderDetailsAction(orderId: string): Promise<OrderDetai
        delivery_lat, delivery_lng, status,
        subtotal, discount, delivery_fee, total, payment_method, comment, lang, estimated_time, requested_time, created_at,
        customers(name:display_name, phone, email),
-       order_items(id, name, variant, comment, qty, unit_price, line_total)`,
+       order_items(id, name, variant, comment, qty, unit_price, line_total, category)`,
     )
     .eq('id', orderId)
     .maybeSingle();
@@ -165,6 +167,7 @@ export async function getOrderDetailsAction(orderId: string): Promise<OrderDetai
         qty: item.qty,
         unitPrice: item.unit_price,
         lineTotal: item.line_total,
+        category: item.category,
       })),
     },
     history,
