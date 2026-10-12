@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { ADMIN_TITLE, RESTAURANT_NAME } from '@/lib/restaurant';
 
 export const metadata: Metadata = {
-  title: 'Takashi Admin',
-  description: 'Административная панель ресторана Takashi',
+  title: ADMIN_TITLE,
+  description: `Административная панель ресторана ${RESTAURANT_NAME}`,
 };
 
 export default function RootLayout({

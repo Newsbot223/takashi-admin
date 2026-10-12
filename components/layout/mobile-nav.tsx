@@ -6,6 +6,7 @@ import { Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { NavLinks } from '@/components/layout/nav-links';
+import { ADMIN_TITLE } from '@/lib/restaurant';
 
 /** Гамбургер-меню для мобильных экранов — открывает тот же список
  *  навигации, что и десктопный Sidebar (скрытый на мобильном, см.
@@ -27,7 +28,7 @@ export function MobileNav() {
       </Button>
       <SheetContent side="left" className="w-3/4 p-0 sm:max-w-xs">
         <SheetHeader className="border-b">
-          <SheetTitle>Takashi Admin</SheetTitle>
+          <SheetTitle>{ADMIN_TITLE}</SheetTitle>
         </SheetHeader>
         <NavLinks onNavigate={() => setOpen(false)} />
       </SheetContent>

@@ -55,7 +55,7 @@ export function LoginForm() {
                 <Input
                   type="email"
                   autoComplete="email"
-                  placeholder="you@takashi-restaurant.com"
+                  placeholder="name@restaurant.de"
                   {...field}
                 />
               </FormControl>
