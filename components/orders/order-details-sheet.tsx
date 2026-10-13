@@ -43,27 +43,27 @@ const SOURCE_LABELS: Record<string, string> = {
   driver_app: 'Приложение водителя',
 };
 
-/** Разделы меню сайта (ключи из index.html) — нужны, чтобы различать
+/** Разделы меню сайта (ключи из index.html), названия — как в меню на сайте — нужны, чтобы различать
  *  одинаковые названия блюд из разных разделов (например "Sake" есть
  *  и в Maki, и в Nigiri; "Ebi Tempura" — и в Maki, и в Inside Out).
  *  Неизвестный/отсутствующий ключ (старые заказы до появления этого
  *  столбца) — показываем как есть, без подписи. */
 const CATEGORY_LABELS: Record<string, string> = {
-  mittagskarte: 'Обеденное меню',
-  vorspeise: 'Закуски',
-  hauptreis: 'Основные с рисом',
-  hauptnudeln: 'Основные с лапшой',
-  pokebowl: 'Поке-боул',
-  fisch: 'Рыба',
-  kinder: 'Детское меню',
-  maki: 'Маки',
-  nigiri: 'Нигири',
-  insideout: 'Инсайд-аут',
+  mittagskarte: 'Mittagskarte',
+  vorspeise: 'Vorspeisen',
+  hauptreis: 'Hauptspeisen mit Reis',
+  hauptnudeln: 'Hauptspeisen mit Nudeln',
+  pokebowl: 'Poke Bowl',
+  fisch: 'Fisch',
+  kinder: 'Kinder Menü',
+  maki: 'Maki',
+  nigiri: 'Nigiri',
+  insideout: 'Inside Out Roll',
   specialroll: 'Special Roll',
   bigroll: 'Big Roll Tempura',
-  sashimi: 'Сашими',
-  sushiset: 'Суши-сет',
-  dessert: 'Десерт',
+  sashimi: 'Sashimi',
+  sushiset: 'Sushi Sets',
+  dessert: 'Dessert',
 };
 
 function formatMoney(value: number) {
