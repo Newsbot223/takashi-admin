@@ -28,7 +28,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { label: 'Bestellungen', href: '/orders', icon: ClipboardList },
   { label: 'Reservierungen', href: '/reservations', icon: CalendarClock },
-  { label: 'Speisekarte', href: '/menu', icon: UtensilsCrossed, disabled: true },
+  { label: 'Speisekarte', href: '/menu', icon: UtensilsCrossed },
   { label: 'Kategorien', href: '/categories', icon: Tags, disabled: true },
   { label: 'Mitarbeiter', href: '/staff', icon: Users },
   { label: 'Kunden', href: '/customers', icon: UserRound },
