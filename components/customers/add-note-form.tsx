@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { addCustomerNoteAction } from '@/app/(dashboard)/customers/actions';
 
 const noteSchema = z.object({
-  note: z.string().min(1, 'Введите текст заметки'),
+  note: z.string().min(1, 'Bitte Notiz eingeben'),
 });
 
 type NoteInput = z.infer<typeof noteSchema>;
@@ -56,14 +56,14 @@ export function AddCustomerNoteForm({ customerId, onAdded }: AddCustomerNoteForm
           render={({ field }) => (
             <FormItem className="flex-1">
               <FormControl>
-                <Input placeholder="Добавить заметку…" {...field} />
+                <Input placeholder="Notiz hinzufügen…" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
         <Button type="submit" size="sm" disabled={isSubmitting}>
-          {isSubmitting ? 'Добавление…' : 'Добавить'}
+          {isSubmitting ? 'Wird hinzugefügt…' : 'Hinzufügen'}
         </Button>
       </form>
       {serverError ? <p className="text-destructive pt-1 text-sm">{serverError}</p> : null}

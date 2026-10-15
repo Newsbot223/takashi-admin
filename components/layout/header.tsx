@@ -4,9 +4,9 @@ import { MobileNav } from '@/components/layout/mobile-nav';
 import type { StaffRole } from '@/lib/auth/require-staff';
 
 const ROLE_LABELS: Record<StaffRole, string> = {
-  admin: 'Администратор',
-  staff: 'Сотрудник',
-  driver: 'Водитель',
+  admin: 'Administrator',
+  staff: 'Mitarbeiter',
+  driver: 'Fahrer',
 };
 
 type HeaderProps = {
@@ -27,7 +27,7 @@ export function Header({ fullName, role }: HeaderProps) {
 
         <form action={logout}>
           <Button type="submit" variant="outline" size="sm">
-            Выйти
+            Abmelden
           </Button>
         </form>
       </div>

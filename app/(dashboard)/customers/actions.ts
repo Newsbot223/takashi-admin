@@ -11,7 +11,7 @@ export async function getCustomerDetailsAction(customerId: string): Promise<Cust
   const customer = await getCustomerDetails(customerId);
 
   if (!customer) {
-    return { ok: false, error: 'Клиент не найден' };
+    return { ok: false, error: 'Kunde nicht gefunden' };
   }
 
   return { ok: true, customer };
@@ -26,7 +26,7 @@ export async function addCustomerNoteAction(
   const trimmed = note.trim();
 
   if (!trimmed) {
-    return { ok: false, error: 'Заметка не может быть пустой' };
+    return { ok: false, error: 'Die Notiz darf nicht leer sein' };
   }
 
   const supabase = await createClient();
@@ -36,7 +36,7 @@ export async function addCustomerNoteAction(
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { ok: false, error: 'Не авторизован' };
+    return { ok: false, error: 'Nicht angemeldet' };
   }
 
   const { error } = await supabase.from('customer_notes').insert({

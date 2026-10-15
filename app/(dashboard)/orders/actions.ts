@@ -85,7 +85,7 @@ export async function getOrderDetailsAction(orderId: string): Promise<OrderDetai
     .maybeSingle();
 
   if (orderError || !orderRow) {
-    return { ok: false, error: 'Заказ не найден' };
+    return { ok: false, error: 'Bestellung nicht gefunden' };
   }
 
   const parsedOrder = orderDetailRowSchema.parse(orderRow);
@@ -97,7 +97,7 @@ export async function getOrderDetailsAction(orderId: string): Promise<OrderDetai
     .order('created_at', { ascending: true });
 
   if (historyError) {
-    return { ok: false, error: 'Не удалось загрузить историю статусов' };
+    return { ok: false, error: 'Statusverlauf konnte nicht geladen werden' };
   }
 
   const history: OrderStatusHistoryEntry[] = (historyRows ?? []).map((row) => {

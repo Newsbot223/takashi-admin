@@ -80,7 +80,7 @@ export function useRealtimeOrders({
 
             if (!row?.id) {
               console.error(
-                '❌ Realtime INSERT пришёл без id:',
+                '❌ Realtime INSERT ohne id:',
                 payload
               );
               return;
@@ -106,7 +106,7 @@ export function useRealtimeOrders({
 
             if (!row?.id) {
               console.error(
-                '❌ Realtime UPDATE пришёл без id:',
+                '❌ Realtime UPDATE ohne id:',
                 payload
               );
               return;

@@ -6,10 +6,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import type { ReservationStatusOption } from '@/lib/reservations/queries';
 
 const STATUS_LABELS_RU: Record<string, string> = {
-  pending: 'Ожидает подтверждения',
-  confirmed: 'Подтверждено',
-  arrived: 'Гость пришёл',
-  cancelled: 'Отменено',
+  pending: 'Wartet auf Bestätigung',
+  confirmed: 'Bestätigt',
+  arrived: 'Gast eingetroffen',
+  cancelled: 'Storniert',
 };
 
 type ReservationsStatusFilterProps = {
@@ -40,10 +40,10 @@ export function ReservationsStatusFilter({ statuses }: ReservationsStatusFilterP
   return (
     <Select value={currentStatus} onValueChange={handleChange}>
       <SelectTrigger className="w-full sm:w-48">
-        <SelectValue placeholder="Все статусы" />
+        <SelectValue placeholder="Alle Status" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value={ALL_VALUE}>Все статусы</SelectItem>
+        <SelectItem value={ALL_VALUE}>Alle Status</SelectItem>
         {statuses.map((status) => (
           <SelectItem key={status.key} value={status.key}>
             {STATUS_LABELS_RU[status.key] ?? status.key}

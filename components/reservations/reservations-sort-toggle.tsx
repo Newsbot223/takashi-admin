@@ -23,7 +23,7 @@ export function ReservationsSortToggle({ sort, search, status }: ReservationsSor
   return (
     <Button asChild variant="outline" size="sm">
       <Link href={buildHref(nextSort, search, status)}>
-        {sort === 'asc' ? 'Ближайшие сначала' : 'Дальние сначала'}
+        {sort === 'asc' ? 'Nächste zuerst' : 'Späteste zuerst'}
       </Link>
     </Button>
   );

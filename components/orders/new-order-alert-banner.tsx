@@ -47,10 +47,10 @@ export function NewOrderAlertBanner() {
       className="animate-alert-blink fixed inset-x-0 top-0 z-[100] flex flex-wrap items-center justify-between gap-3 bg-red-600 px-6 py-3 text-white shadow-lg print:hidden"
     >
       <span className="font-semibold">
-        🔴 НОВЫЙ ЗАКАЗ {orderInfo ? `№${orderInfo.orderNumber}` : '…'} — Ожидает подтверждения
+        🔴 NEUE BESTELLUNG {orderInfo ? `Nr. ${orderInfo.orderNumber}` : '…'} – wartet auf Bestätigung
       </span>
       <Button size="sm" variant="secondary" onClick={handleOpen}>
-        Открыть заказ
+        Bestellung öffnen
       </Button>
     </div>
   );

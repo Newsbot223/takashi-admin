@@ -69,7 +69,7 @@ export function LoginForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Пароль</FormLabel>
+              <FormLabel>Passwort</FormLabel>
               <FormControl>
                 <Input type="password" autoComplete="current-password" {...field} />
               </FormControl>
@@ -85,7 +85,7 @@ export function LoginForm() {
         ) : null}
 
         <Button type="submit" className="w-full" disabled={isSubmitting}>
-          {isSubmitting ? 'Вход…' : 'Войти'}
+          {isSubmitting ? 'Anmeldung…' : 'Anmelden'}
         </Button>
       </form>
     </Form>

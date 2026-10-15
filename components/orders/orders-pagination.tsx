@@ -29,7 +29,7 @@ export function OrdersPagination({ page, totalPages, search, status }: OrdersPag
   return (
     <div className="flex items-center justify-between pt-4">
       <p className="text-muted-foreground text-sm">
-        Страница {page} из {totalPages}
+        Seite {page} von {totalPages}
       </p>
       <div className="flex gap-2">
         <Button
@@ -43,7 +43,7 @@ export function OrdersPagination({ page, totalPages, search, status }: OrdersPag
             aria-disabled={prevDisabled}
             tabIndex={prevDisabled ? -1 : undefined}
           >
-            Назад
+            Zurück
           </Link>
         </Button>
         <Button
@@ -57,7 +57,7 @@ export function OrdersPagination({ page, totalPages, search, status }: OrdersPag
             aria-disabled={nextDisabled}
             tabIndex={nextDisabled ? -1 : undefined}
           >
-            Далее
+            Weiter
           </Link>
         </Button>
       </div>

@@ -24,14 +24,14 @@ type OrdersTableProps = {
 };
 
 const ORDER_TYPE_LABELS: Record<OrderListItem['orderType'], string> = {
-  delivery: 'Доставка',
-  pickup: 'Самовывоз',
+  delivery: 'Lieferung',
+  pickup: 'Abholung',
 };
 
 const HIGHLIGHT_DURATION_MS = 4000;
 
 function formatDateTime(iso: string) {
-  return new Date(iso).toLocaleString('ru-RU', {
+  return new Date(iso).toLocaleString('de-DE', {
     day: '2-digit',
     month: '2-digit',
     hour: '2-digit',
@@ -48,7 +48,7 @@ function formatMoney(value: number) {
  *  клиент ничего не выбрал (заказ "как можно скорее") — не путать с
  *  каким-то ещё "пустым" временем, подставлять текущее время нельзя. */
 function formatRequestedTime(value: string | null) {
-  return value ?? 'Как можно скорее';
+  return value ?? 'So bald wie möglich';
 }
 
 export function OrdersTable({ orders: initialOrders, statuses, search, status }: OrdersTableProps) {
@@ -68,7 +68,7 @@ export function OrdersTable({ orders: initialOrders, statuses, search, status }:
     setOrders(initialOrders);
   }, [initialOrders]);
 
-  /* Открытие конкретного заказа по кнопке "Открыть заказ" в баннере
+  /* Открытие конкретного заказа по кнопке "Bestellung öffnen" в баннере
      нового заказа — работает и когда переход был с другой страницы
      (полный маунт), и когда баннер нажали уже находясь на /orders
      (searchParams меняются мягкой навигацией, эффект отрабатывает
@@ -102,7 +102,7 @@ export function OrdersTable({ orders: initialOrders, statuses, search, status }:
     if (!item) return;
 
     playNotificationSound();
-    toast(`Новый заказ №${item.orderNumber}`, {
+    toast(`Neue Bestellung Nr. ${item.orderNumber}`, {
       description: `${item.customerName} · ${formatMoney(item.total)}`,
     });
 
@@ -163,21 +163,21 @@ export function OrdersTable({ orders: initialOrders, statuses, search, status }:
         {connectionStatus === 'connected'
           ? 'Live'
           : connectionStatus === 'connecting'
-            ? 'Подключение…'
-            : 'Нет соединения — переподключение…'}
+            ? 'Verbinden…'
+            : 'Keine Verbindung – wird neu verbunden…'}
       </div>
 
       {orders.length === 0 ? (
         <div className="text-muted-foreground py-8 text-center">
           {hasActiveFilters ? (
             <div className="space-y-2">
-              <p>Ничего не найдено</p>
+              <p>Nichts gefunden</p>
               <Button asChild variant="outline" size="sm">
-                <a href="/orders">Сбросить фильтры</a>
+                <a href="/orders">Filter zurücksetzen</a>
               </Button>
             </div>
           ) : (
-            <p>Заказов пока нет — они появятся здесь автоматически</p>
+            <p>Noch keine Bestellungen – sie erscheinen hier automatisch</p>
           )}
         </div>
       ) : (
@@ -186,14 +186,14 @@ export function OrdersTable({ orders: initialOrders, statuses, search, status }:
           <Table className="hidden md:table">
             <TableHeader>
               <TableRow>
-                <TableHead>№ заказа</TableHead>
-                <TableHead>Клиент</TableHead>
-                <TableHead>Телефон</TableHead>
-                <TableHead>Тип</TableHead>
-                <TableHead>Статус</TableHead>
-                <TableHead>Сумма</TableHead>
-                <TableHead>Желаемое время</TableHead>
-                <TableHead>Создан</TableHead>
+                <TableHead>Bestell-Nr.</TableHead>
+                <TableHead>Kunde</TableHead>
+                <TableHead>Telefon</TableHead>
+                <TableHead>Art</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Betrag</TableHead>
+                <TableHead>Wunschzeit</TableHead>
+                <TableHead>Erstellt</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -272,7 +272,7 @@ export function OrdersTable({ orders: initialOrders, statuses, search, status }:
                 </div>
 
                 <div className="text-muted-foreground text-xs">
-                  Создан: {formatDateTime(order.createdAt)}
+                  Erstellt: {formatDateTime(order.createdAt)}
                 </div>
               </div>
             ))}

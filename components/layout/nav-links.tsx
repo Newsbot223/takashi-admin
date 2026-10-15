@@ -26,14 +26,14 @@ export type NavItem = {
 
 export const NAV_ITEMS: NavItem[] = [
   { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { label: 'Заказы', href: '/orders', icon: ClipboardList },
-  { label: 'Бронирования', href: '/reservations', icon: CalendarClock },
-  { label: 'Меню', href: '/menu', icon: UtensilsCrossed, disabled: true },
-  { label: 'Категории', href: '/categories', icon: Tags, disabled: true },
-  { label: 'Сотрудники', href: '/staff', icon: Users },
-  { label: 'Клиенты', href: '/customers', icon: UserRound },
-  { label: 'Отзывы', href: '/reviews', icon: Star, disabled: true },
-  { label: 'Настройки', href: '/settings', icon: Settings },
+  { label: 'Bestellungen', href: '/orders', icon: ClipboardList },
+  { label: 'Reservierungen', href: '/reservations', icon: CalendarClock },
+  { label: 'Speisekarte', href: '/menu', icon: UtensilsCrossed, disabled: true },
+  { label: 'Kategorien', href: '/categories', icon: Tags, disabled: true },
+  { label: 'Mitarbeiter', href: '/staff', icon: Users },
+  { label: 'Kunden', href: '/customers', icon: UserRound },
+  { label: 'Bewertungen', href: '/reviews', icon: Star, disabled: true },
+  { label: 'Einstellungen', href: '/settings', icon: Settings },
 ];
 
 type NavLinksProps = {
@@ -59,7 +59,7 @@ export function NavLinks({ onNavigate }: NavLinksProps) {
             <span
               key={item.href}
               aria-disabled="true"
-              title="Скоро"
+              title="Demnächst"
               className="text-muted-foreground/50 flex cursor-not-allowed items-center gap-3 rounded-md px-3 py-2 text-sm"
             >
               <Icon className="size-4" />

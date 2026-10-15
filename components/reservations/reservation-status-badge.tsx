@@ -14,10 +14,10 @@ const STATUS_STYLES: Record<string, string> = {
  * что уже используется для ORDER_TYPE_LABELS/SOURCE_LABELS в Orders.
  */
 const STATUS_LABELS_RU: Record<string, string> = {
-  pending: 'Ожидает подтверждения',
-  confirmed: 'Подтверждено',
-  arrived: 'Гость пришёл',
-  cancelled: 'Отменено',
+  pending: 'Wartet auf Bestätigung',
+  confirmed: 'Bestätigt',
+  arrived: 'Gast eingetroffen',
+  cancelled: 'Storniert',
 };
 
 type ReservationStatusBadgeProps = {

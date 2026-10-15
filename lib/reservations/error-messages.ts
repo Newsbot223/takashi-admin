@@ -8,24 +8,24 @@ export function toFriendlyReservationError(rawMessage: string): string {
   const message = rawMessage.toLowerCase();
 
   if (message.includes('not authorized')) {
-    return 'Недостаточно прав для этого действия.';
+    return 'Keine Berechtigung für diese Aktion.';
   }
   if (message.includes('not found')) {
-    return 'Бронирование не найдено — возможно, оно было удалено.';
+    return 'Reservierung nicht gefunden – evtl. gelöscht.';
   }
   if (message.includes('is not allowed')) {
-    return 'Такой переход статуса недопустим.';
+    return 'Dieser Statuswechsel ist nicht erlaubt.';
   }
   if (message.includes('cannot edit a')) {
-    return 'Нельзя редактировать завершённое бронирование.';
+    return 'Eine abgeschlossene Reservierung kann nicht bearbeitet werden.';
   }
   if (message.includes('persons must be')) {
-    return 'Количество гостей должно быть больше нуля.';
+    return 'Die Anzahl der Gäste muss größer als null sein.';
   }
   if (message.includes('is already')) {
-    return 'Бронирование уже в этом статусе.';
+    return 'Die Reservierung hat diesen Status bereits.';
   }
 
   console.error('[Reservations] Unrecognized error from Supabase:', rawMessage);
-  return 'Не удалось выполнить действие. Попробуйте ещё раз.';
+  return 'Aktion fehlgeschlagen. Bitte erneut versuchen.';
 }

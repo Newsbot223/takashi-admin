@@ -33,14 +33,14 @@ type OrderDetailsSheetProps = {
 };
 
 const ORDER_TYPE_LABELS: Record<'delivery' | 'pickup', string> = {
-  delivery: 'Доставка',
-  pickup: 'Самовывоз',
+  delivery: 'Lieferung',
+  pickup: 'Abholung',
 };
 
 const SOURCE_LABELS: Record<string, string> = {
-  system: 'Система',
-  admin_panel: 'Админ-панель',
-  driver_app: 'Приложение водителя',
+  system: 'System',
+  admin_panel: 'Admin-Panel',
+  driver_app: 'Fahrer-App',
 };
 
 /** Разделы меню сайта (ключи из index.html), названия — как в меню на сайте — нужны, чтобы различать
@@ -71,14 +71,14 @@ function formatMoney(value: number) {
 }
 
 function formatRequestedTime(value: string | null) {
-  return value ?? 'Как можно скорее';
+  return value ?? 'So bald wie möglich';
 }
 
 /** Отличаем конкретно выбранное клиентом время ("19:00") от ASAP-фразы
  *  ("So bald wie möglich"/"As soon as possible"/null) — та же логика,
  *  что в orderSummary.js (email) и index.html (сайт). Используется,
- *  чтобы НЕ показывать одновременно "Желаемое время: 19:00" и
- *  "Ожидаемое время: 35 Min." — это выглядит как два разных времени
+ *  чтобы НЕ показывать одновременно "Wunschzeit: 19:00" и
+ *  "Voraussichtliche Zeit: 35 Min." — это выглядит как два разных времени
  *  готовности одного заказа. */
 const SPECIFIC_TIME_PATTERN = /^\d{1,2}:\d{2}$/;
 function isSpecificRequestedTime(value: string | null) {
@@ -86,7 +86,7 @@ function isSpecificRequestedTime(value: string | null) {
 }
 
 function formatDateTime(iso: string) {
-  return new Date(iso).toLocaleString('ru-RU', {
+  return new Date(iso).toLocaleString('de-DE', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
@@ -172,19 +172,19 @@ export function OrderDetailsSheet({ orderId, statuses, refreshToken = 0, onClose
 
       if (!result.ok) {
         console.error('[Orders] notifyPickupReadyAction failed:', result.error);
-        setNotifyError('Не удалось отправить уведомление. Попробуйте ещё раз.');
+        setNotifyError('Benachrichtigung konnte nicht gesendet werden. Bitte erneut versuchen.');
         return;
       }
 
       if (!result.sent) {
         // already-notified — не ошибка, просто кто-то уже успел отправить
         // (повторный клик / гонка); подтягиваем актуальное состояние.
-        toast('Клиент уже был уведомлён.');
+        toast('Der Kunde wurde bereits benachrichtigt.');
         await refetchOrder(orderId);
         return;
       }
 
-      toast('Клиент уведомлён.');
+      toast('Kunde benachrichtigt.');
       await refetchOrder(orderId);
     });
   }
@@ -200,7 +200,7 @@ export function OrderDetailsSheet({ orderId, statuses, refreshToken = 0, onClose
       <Sheet open={orderId !== null} onOpenChange={(open) => !open && onClose()}>
         <SheetContent className="overflow-y-auto sm:max-w-xl print:static print:h-auto print:w-full print:max-w-none print:overflow-visible print:border-none print:shadow-none">
           {isLoading ? (
-            <div className="text-muted-foreground p-4 text-sm">Загрузка…</div>
+            <div className="text-muted-foreground p-4 text-sm">Wird geladen…</div>
           ) : error && !order ? (
             <div className="text-destructive p-4 text-sm">{error}</div>
           ) : order ? (
@@ -208,17 +208,17 @@ export function OrderDetailsSheet({ orderId, statuses, refreshToken = 0, onClose
               <SheetHeader className="p-0">
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <SheetTitle>Заказ №{order.orderNumber}</SheetTitle>
+                    <SheetTitle>Bestellung Nr. {order.orderNumber}</SheetTitle>
                     <SheetDescription>{formatDateTime(order.createdAt)}</SheetDescription>
                   </div>
                   <div className="flex gap-2 print:hidden">
                     {order.status !== 'delivered' && order.status !== 'cancelled' ? (
                       <Button variant="outline" size="sm" onClick={() => setIsEditDialogOpen(true)}>
-                        Редактировать
+                        Bearbeiten
                       </Button>
                     ) : null}
                     <Button variant="outline" size="sm" onClick={() => window.print()}>
-                      Печать
+                      Drucken
                     </Button>
                   </div>
                 </div>
@@ -239,7 +239,7 @@ export function OrderDetailsSheet({ orderId, statuses, refreshToken = 0, onClose
                   уже видно в Telegram. Отдельно от estimatedTime ниже (это
                   расчётная оценка длительности, "35 Min.", другая величина). */}
               <p className="text-sm">
-                <span className="text-muted-foreground">Желаемое время: </span>
+                <span className="text-muted-foreground">Wunschzeit: </span>
                 <span className="font-medium">{formatRequestedTime(order.requestedTime)}</span>
               </p>
 
@@ -253,10 +253,10 @@ export function OrderDetailsSheet({ orderId, statuses, refreshToken = 0, onClose
                     className="w-fit"
                   >
                     {order.pickupReadyNotifiedAt
-                      ? 'Клиент уведомлён'
+                      ? 'Kunde benachrichtigt'
                       : isNotifyPending
-                        ? 'Отправка…'
-                        : 'Заказ готов — уведомить клиента'}
+                        ? 'Wird gesendet…'
+                        : 'Bestellung fertig – Kunden benachrichtigen'}
                   </Button>
                   {notifyError ? <p className="text-destructive text-xs">{notifyError}</p> : null}
                 </div>
@@ -264,7 +264,7 @@ export function OrderDetailsSheet({ orderId, statuses, refreshToken = 0, onClose
 
               <section className="space-y-1 text-sm">
                 <h3 className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-                  Клиент
+                  Kunde
                 </h3>
                 <button
                   type="button"
@@ -277,7 +277,7 @@ export function OrderDetailsSheet({ orderId, statuses, refreshToken = 0, onClose
                 {order.customerEmail ? <p>{order.customerEmail}</p> : null}
                 <div className="flex flex-wrap gap-2 pt-1 print:hidden">
                   <Button asChild size="sm" variant="outline">
-                    <a href={`tel:${order.customerPhone}`}>Позвонить</a>
+                    <a href={`tel:${order.customerPhone}`}>Anrufen</a>
                   </Button>
                   <Button asChild size="sm" variant="outline">
                     <a href={buildWhatsAppUrl(order.customerPhone)} target="_blank" rel="noopener noreferrer">
@@ -290,18 +290,18 @@ export function OrderDetailsSheet({ orderId, statuses, refreshToken = 0, onClose
               {order.orderType === 'delivery' ? (
                 <section className="space-y-2 text-sm">
                   <h3 className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-                    Адрес доставки
+                    Lieferadresse
                   </h3>
                   {order.deliveryAddress ? <p>{order.deliveryAddress}</p> : null}
                   {order.deliveryZone ? <p className="text-muted-foreground">{order.deliveryZone}</p> : null}
                   {order.estimatedTime && !isSpecificRequestedTime(order.requestedTime) ? (
-                    <p>Ожидаемое время: {order.estimatedTime}</p>
+                    <p>Voraussichtliche Zeit: {order.estimatedTime}</p>
                   ) : null}
                   {mapsUrl ? (
                     <div className="flex items-center gap-3 pt-1 print:hidden">
                       <Button asChild size="sm" variant="outline">
                         <a href={mapsUrl} target="_blank" rel="noopener noreferrer">
-                          Открыть в Google Maps
+                          In Google Maps öffnen
                         </a>
                       </Button>
                       <MapsQrCode url={mapsUrl} size={72} />
@@ -312,7 +312,7 @@ export function OrderDetailsSheet({ orderId, statuses, refreshToken = 0, onClose
 
               <section className="space-y-2 text-sm">
                 <h3 className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-                  Товары
+                  Artikel
                 </h3>
                 <div className="divide-y rounded-md border">
                   {order.items.map((item) => {
@@ -337,23 +337,23 @@ export function OrderDetailsSheet({ orderId, statuses, refreshToken = 0, onClose
                   })}
                 </div>
                 <div className="flex justify-between pt-1">
-                  <span className="text-muted-foreground">Подытог</span>
+                  <span className="text-muted-foreground">Zwischensumme</span>
                   <span>{formatMoney(order.subtotal)}</span>
                 </div>
                 {order.discount > 0 ? (
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Скидка</span>
+                    <span className="text-muted-foreground">Rabatt</span>
                     <span>−{formatMoney(order.discount)}</span>
                   </div>
                 ) : null}
                 {order.deliveryFee > 0 ? (
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Доставка</span>
+                    <span className="text-muted-foreground">Liefergebühr</span>
                     <span>{formatMoney(order.deliveryFee)}</span>
                   </div>
                 ) : null}
                 <div className="flex justify-between font-medium">
-                  <span>Итого</span>
+                  <span>Gesamt</span>
                   <span>{formatMoney(order.total)}</span>
                 </div>
               </section>
@@ -361,7 +361,7 @@ export function OrderDetailsSheet({ orderId, statuses, refreshToken = 0, onClose
               {order.comment ? (
                 <section className="space-y-1 text-sm">
                   <h3 className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-                    Комментарий клиента
+                    Kommentar des Kunden
                   </h3>
                   <p>{order.comment}</p>
                 </section>
@@ -369,7 +369,7 @@ export function OrderDetailsSheet({ orderId, statuses, refreshToken = 0, onClose
 
               <section className="space-y-2 text-sm">
                 <h3 className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-                  История статусов
+                  Statusverlauf
                 </h3>
                 <ul className="space-y-1">
                   {history.map((entry) => (
@@ -387,7 +387,7 @@ export function OrderDetailsSheet({ orderId, statuses, refreshToken = 0, onClose
               {regularNextStatuses.length > 0 ? (
                 <section className="space-y-2 print:hidden">
                   <h3 className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-                    Изменить статус
+                    Status ändern
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {regularNextStatuses.map((statusKey) => (
@@ -412,7 +412,7 @@ export function OrderDetailsSheet({ orderId, statuses, refreshToken = 0, onClose
                   onClick={() => handleStatusChange('cancelled')}
                   className="w-fit print:hidden"
                 >
-                  Отменить заказ
+                  Bestellung stornieren
                 </Button>
               ) : null}
 

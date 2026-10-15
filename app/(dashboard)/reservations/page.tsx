@@ -22,8 +22,8 @@ export default async function ReservationsPage({ searchParams }: ReservationsPag
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Бронирования</h1>
-        <p className="text-muted-foreground text-sm">Список всех бронирований столов</p>
+        <h1 className="text-2xl font-semibold tracking-tight">Reservierungen</h1>
+        <p className="text-muted-foreground text-sm">Alle Tischreservierungen</p>
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">

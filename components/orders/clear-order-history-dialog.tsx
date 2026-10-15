@@ -99,7 +99,7 @@ export function ClearOrderHistoryButton() {
       return;
     }
 
-    toast(`Удалено заказов: ${result.deletedCount}`);
+    toast(`Gelöschte Bestellungen: ${result.deletedCount}`);
     setOpen(false);
     router.refresh();
   }
@@ -114,22 +114,22 @@ export function ClearOrderHistoryButton() {
         onClick={() => setOpen(true)}
         className="print:hidden"
       >
-        Очистить историю
+        Verlauf löschen
       </Button>
 
       <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Очистить историю заказов</DialogTitle>
+            <DialogTitle>Bestellverlauf löschen</DialogTitle>
             <DialogDescription>
-              Выберите дату. Будут удалены только завершённые и отменённые заказы до этой даты.
-              Активные заказы останутся.
+              Datum wählen. Gelöscht werden nur abgeschlossene und stornierte Bestellungen vor diesem Datum.
+              Aktive Bestellungen bleiben erhalten.
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-2">
             <label htmlFor="clear-history-date" className="text-sm font-medium">
-              Удалить заказы до
+              Bestellungen löschen vor dem
             </label>
             <Input
               id="clear-history-date"
@@ -142,30 +142,30 @@ export function ClearOrderHistoryButton() {
 
           <div className="text-sm">
             {isLoadingCount ? (
-              <span className="text-muted-foreground">Подсчёт…</span>
+              <span className="text-muted-foreground">Wird gezählt…</span>
             ) : error ? (
               <span className="text-destructive">{error}</span>
             ) : count === 0 ? (
-              <span className="text-muted-foreground">Заказы для удаления не найдены.</span>
+              <span className="text-muted-foreground">Keine Bestellungen zum Löschen gefunden.</span>
             ) : count !== null ? (
               <span>
-                Будет удалено: <span className="font-medium">{count}</span>{' '}
-                {count === 1 ? 'заказ' : 'заказов'}
+                Wird gelöscht: <span className="font-medium">{count}</span>{' '}
+                {count === 1 ? 'Bestellung' : 'Bestellungen'}
               </span>
             ) : null}
           </div>
 
           <p className="text-muted-foreground text-xs">
-            Это действие нельзя отменить. Активные заказы (не в финальном статусе) никогда не
-            затрагиваются.
+            Diese Aktion kann nicht rückgängig gemacht werden. Aktive Bestellungen (nicht im Endstatus) sind
+            nie betroffen.
           </p>
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setOpen(false)} disabled={isDeleting}>
-              Отмена
+              Abbrechen
             </Button>
             <Button variant="destructive" onClick={handleConfirmDelete} disabled={!canDelete}>
-              {isDeleting ? 'Удаление…' : `Удалить ${count ?? 0} заказов`}
+              {isDeleting ? 'Wird gelöscht…' : `${count ?? 0} Bestellungen löschen`}
             </Button>
           </DialogFooter>
         </DialogContent>

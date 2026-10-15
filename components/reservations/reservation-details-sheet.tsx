@@ -23,29 +23,29 @@ type ReservationDetailsSheetProps = {
 };
 
 const STATUS_LABELS_RU: Record<string, string> = {
-  pending: 'Ожидает подтверждения',
-  confirmed: 'Подтверждено',
-  arrived: 'Гость пришёл',
-  cancelled: 'Отменено',
+  pending: 'Wartet auf Bestätigung',
+  confirmed: 'Bestätigt',
+  arrived: 'Gast eingetroffen',
+  cancelled: 'Storniert',
 };
 
 const STATUS_ACTION_LABELS_RU: Record<string, string> = {
-  confirmed: 'Подтвердить',
-  arrived: 'Гость пришёл',
-  cancelled: 'Отменить',
+  confirmed: 'Bestätigen',
+  arrived: 'Gast eingetroffen',
+  cancelled: 'Stornieren',
 };
 
 const SOURCE_LABELS: Record<string, string> = {
-  system: 'Система',
-  admin_panel: 'Админ-панель',
+  system: 'System',
+  admin_panel: 'Admin-Panel',
 };
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  return new Date(iso).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
 }
 
 function formatDateTime(iso: string) {
-  return new Date(iso).toLocaleString('ru-RU', {
+  return new Date(iso).toLocaleString('de-DE', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
@@ -120,7 +120,7 @@ export function ReservationDetailsSheet({ reservationId, onClose }: ReservationD
       <Sheet open={reservationId !== null} onOpenChange={(open) => !open && onClose()}>
         <SheetContent className="overflow-y-auto sm:max-w-xl">
           {isLoading ? (
-            <div className="text-muted-foreground p-4 text-sm">Загрузка…</div>
+            <div className="text-muted-foreground p-4 text-sm">Wird geladen…</div>
           ) : error && !reservation ? (
             <div className="text-destructive p-4 text-sm">{error}</div>
           ) : reservation ? (
@@ -131,11 +131,11 @@ export function ReservationDetailsSheet({ reservationId, onClose }: ReservationD
                     <SheetTitle>
                       {formatDate(reservation.date)} · {reservation.time}
                     </SheetTitle>
-                    <SheetDescription>Создано {formatDateTime(reservation.createdAt)}</SheetDescription>
+                    <SheetDescription>Erstellt {formatDateTime(reservation.createdAt)}</SheetDescription>
                   </div>
                   {canEdit ? (
                     <Button variant="outline" size="sm" onClick={() => setIsEditDialogOpen(true)}>
-                      Редактировать
+                      Bearbeiten
                     </Button>
                   ) : null}
                 </div>
@@ -147,7 +147,7 @@ export function ReservationDetailsSheet({ reservationId, onClose }: ReservationD
 
               <section className="space-y-1 text-sm">
                 <h3 className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-                  Клиент
+                  Kunde
                 </h3>
                 <button
                   type="button"
@@ -160,7 +160,7 @@ export function ReservationDetailsSheet({ reservationId, onClose }: ReservationD
                 {reservation.customerEmail ? <p>{reservation.customerEmail}</p> : null}
                 <div className="flex flex-wrap gap-2 pt-1">
                   <Button asChild size="sm" variant="outline">
-                    <a href={`tel:${reservation.customerPhone}`}>Позвонить</a>
+                    <a href={`tel:${reservation.customerPhone}`}>Anrufen</a>
                   </Button>
                   <Button asChild size="sm" variant="outline">
                     <a
@@ -176,15 +176,15 @@ export function ReservationDetailsSheet({ reservationId, onClose }: ReservationD
 
               <section className="space-y-1 text-sm">
                 <h3 className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-                  Бронирование
+                  Reservierung
                 </h3>
-                <p>Гостей: {reservation.persons}</p>
-                {reservation.comment ? <p>Комментарий: {reservation.comment}</p> : null}
+                <p>Gäste: {reservation.persons}</p>
+                {reservation.comment ? <p>Kommentar: {reservation.comment}</p> : null}
               </section>
 
               <section className="space-y-2 text-sm">
                 <h3 className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-                  История статусов
+                  Statusverlauf
                 </h3>
                 <ul className="space-y-1">
                   {history.map((entry) => (
@@ -202,7 +202,7 @@ export function ReservationDetailsSheet({ reservationId, onClose }: ReservationD
               {allowedNextStatuses.length > 0 ? (
                 <section className="space-y-2">
                   <h3 className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-                    Изменить статус
+                    Status ändern
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {allowedNextStatuses.map((statusKey) => (

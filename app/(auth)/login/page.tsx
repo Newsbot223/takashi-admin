@@ -8,7 +8,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>{ADMIN_TITLE}</CardTitle>
-          <CardDescription>Вход для сотрудников</CardDescription>
+          <CardDescription>Anmeldung für Mitarbeiter</CardDescription>
         </CardHeader>
         <CardContent>
           <LoginForm />

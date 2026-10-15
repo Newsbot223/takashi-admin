@@ -18,17 +18,17 @@ type ReservationsTableProps = {
 
 const QUICK_ACTIONS: Record<string, { targetStatus: string; label: string; variant: 'default' | 'destructive' }[]> = {
   pending: [
-    { targetStatus: 'confirmed', label: 'Подтвердить', variant: 'default' },
-    { targetStatus: 'cancelled', label: 'Отменить', variant: 'destructive' },
+    { targetStatus: 'confirmed', label: 'Bestätigen', variant: 'default' },
+    { targetStatus: 'cancelled', label: 'Stornieren', variant: 'destructive' },
   ],
   confirmed: [
-    { targetStatus: 'arrived', label: 'Гость пришёл', variant: 'default' },
-    { targetStatus: 'cancelled', label: 'Отменить', variant: 'destructive' },
+    { targetStatus: 'arrived', label: 'Gast eingetroffen', variant: 'default' },
+    { targetStatus: 'cancelled', label: 'Stornieren', variant: 'destructive' },
   ],
 };
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  return new Date(iso).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
 }
 
 export function ReservationsTable({ reservations, search, status }: ReservationsTableProps) {
@@ -50,13 +50,13 @@ export function ReservationsTable({ reservations, search, status }: Reservations
         <div className="text-muted-foreground py-8 text-center">
           {hasActiveFilters ? (
             <div className="space-y-2">
-              <p>Ничего не найдено</p>
+              <p>Nichts gefunden</p>
               <Button asChild variant="outline" size="sm">
-                <a href="/reservations">Сбросить фильтры</a>
+                <a href="/reservations">Filter zurücksetzen</a>
               </Button>
             </div>
           ) : (
-            <p>Бронирований пока нет — они появятся здесь автоматически</p>
+            <p>Noch keine Reservierungen – sie erscheinen hier automatisch</p>
           )}
         </div>
       ) : (
@@ -65,13 +65,13 @@ export function ReservationsTable({ reservations, search, status }: Reservations
           <Table className="hidden md:table">
             <TableHeader>
               <TableRow>
-                <TableHead>Дата</TableHead>
-                <TableHead>Время</TableHead>
-                <TableHead>Клиент</TableHead>
-                <TableHead>Телефон</TableHead>
-                <TableHead>Гостей</TableHead>
-                <TableHead>Статус</TableHead>
-                <TableHead>Быстрые действия</TableHead>
+                <TableHead>Datum</TableHead>
+                <TableHead>Uhrzeit</TableHead>
+                <TableHead>Kunde</TableHead>
+                <TableHead>Telefon</TableHead>
+                <TableHead>Gäste</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Schnellaktionen</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -181,7 +181,7 @@ export function ReservationsTable({ reservations, search, status }: Reservations
                     onClick={() => setSelectedReservationId(reservation.id)}
                   >
                     <span>{reservation.customerPhone}</span>
-                    <span className="text-right">Гостей: {reservation.persons}</span>
+                    <span className="text-right">Gäste: {reservation.persons}</span>
                   </div>
 
                   {actions.length > 0 && (

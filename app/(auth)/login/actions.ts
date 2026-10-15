@@ -14,7 +14,7 @@ export async function login(values: {
   const parsed = loginSchema.safeParse(values);
 
   if (!parsed.success) {
-    return { error: 'Проверьте правильность заполнения полей' };
+    return { error: 'Bitte überprüfen Sie Ihre Eingaben' };
   }
 
   const supabase = await createClient();
@@ -25,7 +25,7 @@ export async function login(values: {
   });
 
   if (error || !data.user) {
-    return { error: 'Неверный email или пароль' };
+    return { error: 'E-Mail oder Passwort ist falsch' };
   }
 
   const { data: staffRow, error: staffError } = await supabase
@@ -36,7 +36,7 @@ export async function login(values: {
   
     if (staffError || !staffRow || !staffRow.is_active) {
     await supabase.auth.signOut();
-    return { error: 'У вас нет доступа к панели администратора' };
+    return { error: 'Sie haben keinen Zugriff auf das Admin-Panel' };
   }
 
   redirect('/dashboard');

@@ -1,3 +1,3 @@
 export default function StaffPage() {
-  return <h1>Сотрудники</h1>;
+  return <h1>Mitarbeiter</h1>;
 }

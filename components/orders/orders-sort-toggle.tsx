@@ -23,7 +23,7 @@ export function OrdersSortToggle({ sort, search, status }: OrdersSortToggleProps
   return (
     <Button asChild variant="outline" size="sm">
       <Link href={buildHref(nextSort, search, status)}>
-        {sort === 'desc' ? 'Сначала новые' : 'Сначала старые'}
+        {sort === 'desc' ? 'Neueste zuerst' : 'Älteste zuerst'}
       </Link>
     </Button>
   );

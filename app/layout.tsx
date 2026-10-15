@@ -4,7 +4,7 @@ import { ADMIN_TITLE, RESTAURANT_NAME } from '@/lib/restaurant';
 
 export const metadata: Metadata = {
   title: ADMIN_TITLE,
-  description: `Административная панель ресторана ${RESTAURANT_NAME}`,
+  description: `Admin-Panel des Restaurants ${RESTAURANT_NAME}`,
 };
 
 export default function RootLayout({
@@ -16,7 +16,7 @@ export default function RootLayout({
   // темы (Settings, будущий этап) — безвредно уже сейчас, добавлять позже
   // отдельным изменением нет смысла.
   return (
-    <html lang="ru" suppressHydrationWarning>
+    <html lang="de" suppressHydrationWarning>
       <body>{children}</body>
     </html>
   );

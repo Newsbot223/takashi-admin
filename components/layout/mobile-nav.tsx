@@ -21,7 +21,7 @@ export function MobileNav() {
         variant="ghost"
         size="icon"
         className="md:hidden"
-        aria-label="Открыть меню"
+        aria-label="Menü öffnen"
         onClick={() => setOpen(true)}
       >
         <Menu className="size-5" />

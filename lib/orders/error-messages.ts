@@ -9,24 +9,24 @@ export function toFriendlyOrderError(rawMessage: string): string {
   const message = rawMessage.toLowerCase();
 
   if (message.includes('not authorized')) {
-    return 'Недостаточно прав для этого действия.';
+    return 'Keine Berechtigung für diese Aktion.';
   }
   if (message.includes('not found')) {
-    return 'Заказ не найден — возможно, он был удалён или уже недоступен.';
+    return 'Bestellung nicht gefunden – evtl. gelöscht oder nicht mehr verfügbar.';
   }
   if (message.includes('is not allowed')) {
-    return 'Такой переход статуса недопустим.';
+    return 'Dieser Statuswechsel ist nicht erlaubt.';
   }
   if (message.includes('cannot edit a')) {
-    return 'Нельзя редактировать завершённый заказ.';
+    return 'Eine abgeschlossene Bestellung kann nicht bearbeitet werden.';
   }
   if (message.includes('discount cannot')) {
-    return 'Некорректное значение скидки.';
+    return 'Ungültiger Rabatt.';
   }
   if (message.includes('is already')) {
-    return 'Заказ уже в этом статусе.';
+    return 'Die Bestellung hat diesen Status bereits.';
   }
 
   console.error('[Orders] Unrecognized error from Supabase:', rawMessage);
-  return 'Не удалось выполнить действие. Попробуйте ещё раз.';
+  return 'Aktion fehlgeschlagen. Bitte erneut versuchen.';
 }

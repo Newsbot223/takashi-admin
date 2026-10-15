@@ -21,11 +21,11 @@ function formatMoney(value: number) {
 }
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  return new Date(iso).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
 }
 
 function formatDateTime(iso: string) {
-  return new Date(iso).toLocaleString('ru-RU', {
+  return new Date(iso).toLocaleString('de-DE', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
@@ -71,14 +71,14 @@ export function CustomerDetailsSheet({ customerId, onClose }: CustomerDetailsShe
     <Sheet open={customerId !== null} onOpenChange={(open) => !open && onClose()}>
       <SheetContent className="overflow-y-auto sm:max-w-xl">
         {isLoading ? (
-          <div className="text-muted-foreground p-4 text-sm">Загрузка…</div>
+          <div className="text-muted-foreground p-4 text-sm">Wird geladen…</div>
         ) : error ? (
           <div className="text-destructive p-4 text-sm">{error}</div>
         ) : customer ? (
           <div className="flex flex-col gap-6 p-4">
             <SheetHeader className="p-0">
               <SheetTitle>{customer.name}</SheetTitle>
-              <SheetDescription>Клиент с {formatDate(customer.createdAt)}</SheetDescription>
+              <SheetDescription>Kunde seit {formatDate(customer.createdAt)}</SheetDescription>
             </SheetHeader>
 
             <section className="space-y-1 text-sm">
@@ -86,7 +86,7 @@ export function CustomerDetailsSheet({ customerId, onClose }: CustomerDetailsShe
               {customer.email ? <p>{customer.email}</p> : null}
               <div className="flex flex-wrap gap-2 pt-2">
                 <Button asChild size="sm" variant="outline">
-                  <a href={`tel:${customer.phone}`}>Позвонить</a>
+                  <a href={`tel:${customer.phone}`}>Anrufen</a>
                 </Button>
                 <Button asChild size="sm" variant="outline">
                   <a href={buildWhatsAppUrl(customer.phone)} target="_blank" rel="noopener noreferrer">
@@ -98,19 +98,19 @@ export function CustomerDetailsSheet({ customerId, onClose }: CustomerDetailsShe
 
             <section className="grid grid-cols-2 gap-3 text-sm">
               <div className="rounded-md border p-3">
-                <div className="text-muted-foreground text-xs">Заказов</div>
+                <div className="text-muted-foreground text-xs">Bestellungen</div>
                 <div className="text-lg font-semibold">{customer.orderCount}</div>
               </div>
               <div className="rounded-md border p-3">
-                <div className="text-muted-foreground text-xs">Сумма заказов</div>
+                <div className="text-muted-foreground text-xs">Bestellsumme</div>
                 <div className="text-lg font-semibold">{formatMoney(customer.totalSpent)}</div>
               </div>
               <div className="rounded-md border p-3">
-                <div className="text-muted-foreground text-xs">Средний чек</div>
+                <div className="text-muted-foreground text-xs">Durchschnittlicher Bon</div>
                 <div className="text-lg font-semibold">{formatMoney(customer.averageCheck)}</div>
               </div>
               <div className="rounded-md border p-3">
-                <div className="text-muted-foreground text-xs">Последний заказ</div>
+                <div className="text-muted-foreground text-xs">Letzte Bestellung</div>
                 <div className="text-sm font-medium">
                   {customer.lastOrderAt ? formatDate(customer.lastOrderAt) : '—'}
                 </div>
@@ -120,7 +120,7 @@ export function CustomerDetailsSheet({ customerId, onClose }: CustomerDetailsShe
             {customer.addresses.length > 0 ? (
               <section className="space-y-2 text-sm">
                 <h3 className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-                  Адреса
+                  Adressen
                 </h3>
                 <ul className="space-y-1">
                   {customer.addresses.map((addr) => {
@@ -146,7 +146,7 @@ export function CustomerDetailsSheet({ customerId, onClose }: CustomerDetailsShe
                   <div className="flex items-center gap-3 pt-1">
                     <Button asChild size="sm" variant="outline">
                       <a href={mapsUrl} target="_blank" rel="noopener noreferrer">
-                        Открыть в Google Maps
+                        In Google Maps öffnen
                       </a>
                     </Button>
                     <MapsQrCode url={mapsUrl} size={72} />
@@ -157,10 +157,10 @@ export function CustomerDetailsSheet({ customerId, onClose }: CustomerDetailsShe
 
             <section className="space-y-2 text-sm">
               <h3 className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-                История заказов
+                Bestellverlauf
               </h3>
               {customer.orders.length === 0 ? (
-                <p className="text-muted-foreground">Заказов пока нет</p>
+                <p className="text-muted-foreground">Noch keine Bestellungen</p>
               ) : (
                 <ul className="divide-y rounded-md border">
                   {customer.orders.map((order) => (
@@ -176,10 +176,10 @@ export function CustomerDetailsSheet({ customerId, onClose }: CustomerDetailsShe
 
             <section className="space-y-2 text-sm">
               <h3 className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-                История бронирований
+                Reservierungsverlauf
               </h3>
               {customer.reservations.length === 0 ? (
-                <p className="text-muted-foreground">Броней пока нет</p>
+                <p className="text-muted-foreground">Noch keine Reservierungen</p>
               ) : (
                 <ul className="divide-y rounded-md border">
                   {customer.reservations.map((reservation) => (
@@ -187,7 +187,7 @@ export function CustomerDetailsSheet({ customerId, onClose }: CustomerDetailsShe
                       <span>
                         {formatDate(reservation.date)} {reservation.time}
                       </span>
-                      <span>{reservation.persons} чел.</span>
+                      <span>{reservation.persons} Pers.</span>
                     </li>
                   ))}
                 </ul>
@@ -196,10 +196,10 @@ export function CustomerDetailsSheet({ customerId, onClose }: CustomerDetailsShe
 
             <section className="space-y-2 text-sm">
               <h3 className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-                Заметки сотрудников
+                Notizen der Mitarbeiter
               </h3>
               {customer.notes.length === 0 ? (
-                <p className="text-muted-foreground">Заметок пока нет</p>
+                <p className="text-muted-foreground">Noch keine Notizen</p>
               ) : (
                 <ul className="space-y-2">
                   {customer.notes.map((note) => (

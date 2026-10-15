@@ -32,7 +32,7 @@ export function ReservationsSearch() {
 
   return (
     <Input
-      placeholder="Поиск по имени или телефону…"
+      placeholder="Suche nach Name oder Telefon…"
       value={value}
       onChange={(event) => setValue(event.target.value)}
       className="w-full sm:max-w-xs"

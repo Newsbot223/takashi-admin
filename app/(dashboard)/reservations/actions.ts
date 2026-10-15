@@ -50,7 +50,7 @@ export async function getReservationDetailsAction(reservationId: string): Promis
     .maybeSingle();
 
   if (reservationError || !reservationRow) {
-    return { ok: false, error: 'Бронирование не найдено' };
+    return { ok: false, error: 'Reservierung nicht gefunden' };
   }
 
   const parsedReservation = reservationDetailRowSchema.parse(reservationRow);
@@ -62,7 +62,7 @@ export async function getReservationDetailsAction(reservationId: string): Promis
     .order('created_at', { ascending: true });
 
   if (historyError) {
-    return { ok: false, error: 'Не удалось загрузить историю статусов' };
+    return { ok: false, error: 'Statusverlauf konnte nicht geladen werden' };
   }
 
   const history: ReservationStatusHistoryEntry[] = (historyRows ?? []).map((row) => {

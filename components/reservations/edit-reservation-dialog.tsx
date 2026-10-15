@@ -13,9 +13,9 @@ import { updateReservationAction, type ReservationDetail } from '@/app/(dashboar
 import { toFriendlyReservationError } from '@/lib/reservations/error-messages';
 
 const editReservationSchema = z.object({
-  date: z.string().min(1, 'Укажите дату'),
-  time: z.string().min(1, 'Укажите время'),
-  persons: z.coerce.number().int().min(1, 'Не меньше одного гостя'),
+  date: z.string().min(1, 'Bitte Datum angeben'),
+  time: z.string().min(1, 'Bitte Uhrzeit angeben'),
+  persons: z.coerce.number().int().min(1, 'Mindestens ein Gast'),
   comment: z.string(),
 });
 
@@ -68,7 +68,7 @@ export function EditReservationDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Редактировать бронирование</DialogTitle>
+          <DialogTitle>Reservierung bearbeiten</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
@@ -78,7 +78,7 @@ export function EditReservationDialog({
               name="date"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Дата</FormLabel>
+                  <FormLabel>Datum</FormLabel>
                   <FormControl>
                     <Input type="date" {...field} />
                   </FormControl>
@@ -92,7 +92,7 @@ export function EditReservationDialog({
               name="time"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Время</FormLabel>
+                  <FormLabel>Uhrzeit</FormLabel>
                   <FormControl>
                     <Input type="time" {...field} />
                   </FormControl>
@@ -106,7 +106,7 @@ export function EditReservationDialog({
               name="persons"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Количество гостей</FormLabel>
+                  <FormLabel>Anzahl Gäste</FormLabel>
                   <FormControl>
                     <Input type="number" min="1" step="1" {...field} />
                   </FormControl>
@@ -120,7 +120,7 @@ export function EditReservationDialog({
               name="comment"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Комментарий</FormLabel>
+                  <FormLabel>Kommentar</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -133,7 +133,7 @@ export function EditReservationDialog({
 
             <DialogFooter>
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Сохранение…' : 'Сохранить'}
+                {isSubmitting ? 'Wird gespeichert…' : 'Speichern'}
               </Button>
             </DialogFooter>
           </form>

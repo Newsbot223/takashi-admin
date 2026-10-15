@@ -33,10 +33,10 @@ export function OrdersStatusFilter({ statuses }: OrdersStatusFilterProps) {
   return (
     <Select value={currentStatus} onValueChange={handleChange}>
       <SelectTrigger className="w-full sm:w-48">
-        <SelectValue placeholder="Все статусы" />
+        <SelectValue placeholder="Alle Status" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value={ALL_VALUE}>Все статусы</SelectItem>
+        <SelectItem value={ALL_VALUE}>Alle Status</SelectItem>
         {statuses.map((status) => (
           <SelectItem key={status.key} value={status.key}>
             {status.labelDe}

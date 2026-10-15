@@ -18,7 +18,7 @@ const editOrderSchema = z.object({
   comment: z.string(),
   paymentMethod: z.string(),
   estimatedTime: z.string(),
-  discount: z.coerce.number().min(0, 'Скидка не может быть отрицательной'),
+  discount: z.coerce.number().min(0, 'Der Rabatt darf nicht negativ sein'),
 });
 
 type EditOrderInput = z.infer<typeof editOrderSchema>;
@@ -67,7 +67,7 @@ export function EditOrderDialog({ order, open, onOpenChange, onSaved }: EditOrde
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Редактировать заказ №{order.orderNumber}</DialogTitle>
+          <DialogTitle>Bestellung bearbeiten Nr. {order.orderNumber}</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
@@ -79,7 +79,7 @@ export function EditOrderDialog({ order, open, onOpenChange, onSaved }: EditOrde
                   name="deliveryAddress"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Адрес доставки</FormLabel>
+                      <FormLabel>Lieferadresse</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -92,7 +92,7 @@ export function EditOrderDialog({ order, open, onOpenChange, onSaved }: EditOrde
                   name="deliveryZone"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Зона доставки</FormLabel>
+                      <FormLabel>Lieferzone</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -108,7 +108,7 @@ export function EditOrderDialog({ order, open, onOpenChange, onSaved }: EditOrde
               name="paymentMethod"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Способ оплаты</FormLabel>
+                  <FormLabel>Zahlungsart</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -122,7 +122,7 @@ export function EditOrderDialog({ order, open, onOpenChange, onSaved }: EditOrde
               name="estimatedTime"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Ожидаемое время</FormLabel>
+                  <FormLabel>Voraussichtliche Zeit</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -136,7 +136,7 @@ export function EditOrderDialog({ order, open, onOpenChange, onSaved }: EditOrde
               name="discount"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Скидка (€)</FormLabel>
+                  <FormLabel>Rabatt (€)</FormLabel>
                   <FormControl>
                     <Input type="number" step="0.01" min="0" {...field} />
                   </FormControl>
@@ -150,7 +150,7 @@ export function EditOrderDialog({ order, open, onOpenChange, onSaved }: EditOrde
               name="comment"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Комментарий</FormLabel>
+                  <FormLabel>Kommentar</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -163,7 +163,7 @@ export function EditOrderDialog({ order, open, onOpenChange, onSaved }: EditOrde
 
             <DialogFooter>
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Сохранение…' : 'Сохранить'}
+                {isSubmitting ? 'Wird gespeichert…' : 'Speichern'}
               </Button>
             </DialogFooter>
           </form>

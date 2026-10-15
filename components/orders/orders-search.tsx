@@ -32,7 +32,7 @@ export function OrdersSearch() {
 
   return (
     <Input
-      placeholder="Поиск по номеру, имени или телефону…"
+      placeholder="Suche nach Nummer, Name oder Telefon…"
       value={value}
       onChange={(event) => setValue(event.target.value)}
       className="w-full sm:max-w-xs"
